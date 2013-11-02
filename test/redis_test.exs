@@ -22,6 +22,12 @@ defmodule RedisTest do
     assert R.ttl(:pi) == -1
   end
 
+  test "expire works" do
+    R.set(:expire, 3)
+    assert R.expire(:expire, 3) == 1
+    assert R.ttl(:expire) >= 1
+  end
+
   test "flushall works" do
     assert R.flushall == :ok
   end

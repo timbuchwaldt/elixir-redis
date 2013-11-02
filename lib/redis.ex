@@ -15,19 +15,24 @@ defmodule Redis do
     call_server { :get, key }
   end
 
-  @spec set(key,value) :: sts_reply
-  def set(key,value) do
-    call_server {:set, key, value}
+  @spec set(key, value) :: sts_reply
+  def set(key, value) do
+    call_server({ :set, key, value }) |> sts_reply
   end
 
   @spec ttl(key) :: int_reply
   def ttl(key) do
-    call_server {:ttl, key}
+    call_server({:ttl, key}) |> int_reply
+  end
+
+  @spec expire(key, value) :: int_reply
+  def expire(key, value) do
+    call_server({:expire, key, value}) |> int_reply
   end
 
   @spec flushall :: sts_reply
   def flushall do
-    call_server :flushall
+    call_server({:flushall}) |> sts_reply
   end
 
   @spec call_server(tuple|atom) :: value
@@ -40,4 +45,14 @@ defmodule Redis do
     Process.whereis(:redis)
   end
 
+  @spec int_reply(binary) :: integer
+  defp int_reply(reply), do:
+    reply |> binary_to_integer
+
+  @spec sts_reply(binary) :: :ok | binary
+  defp sts_reply("OK"), do:
+    :ok
+
+  defp sts_reply(reply), do:
+    reply
 end
