@@ -20,15 +20,44 @@ defmodule Redis do
     call_server({ :set, key, value }) |> sts_reply
   end
 
-  @spec sadd(key, value) :: sts_reply
+  # Set functions:
+
+  @spec sadd(key, value) :: int_reply
   def sadd(key, value) do
-    call_server({ :set, key, value }) |> sts_reply
+    call_server({ :sadd, key, value }) |> int_reply
   end
 
   @spec smembers(key) :: sts_reply
   def smembers(key) do
     call_server({ :smembers, key }) |> sts_reply
   end
+
+  @spec scard(key) :: int_reply
+  def scard(key) do
+    call_server({ :scard, key }) |> int_reply
+  end
+
+  @spec sismember(key, value) :: int_reply
+  def sismember(key, value) do
+    call_server({ :sismember, key, value }) |> int_reply
+  end
+
+  @spec spop(key) :: sts_reply
+  def spop(key) do
+    call_server({ :spop, key }) |> sts_reply
+  end
+
+  @spec srandmember(key) :: sts_reply
+  def srandmember(key) do
+    call_server({ :srandmember, key }) |> sts_reply
+  end
+
+  @spec srem(key, value) :: int_reply
+  def srem(key, value) do
+    call_server({ :srem, key, value }) |> int_reply
+  end
+
+  # end set functions
 
   @spec ttl(key) :: int_reply
   def ttl(key) do
