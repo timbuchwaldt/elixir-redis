@@ -20,6 +20,16 @@ defmodule Redis do
     call_server({ :set, key, value }) |> sts_reply
   end
 
+  @spec sadd(key, value) :: sts_reply
+  def sadd(key, value) do
+    call_server({ :set, key, value }) |> sts_reply
+  end
+
+  @spec smembers(key) :: sts_reply
+  def smembers(key) do
+    call_server({ :smembers, key }) |> sts_reply
+  end
+
   @spec ttl(key) :: int_reply
   def ttl(key) do
     call_server({:ttl, key}) |> int_reply
