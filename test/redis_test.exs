@@ -2,6 +2,13 @@ defmodule RedisTest do
   use ExUnit.Case, async: true
   alias Redis, as: R
 
+  test "start with arguments" do
+    R.start(host: "127.0.0.1",
+            port: 6379,
+            db: "switchboard",
+            password: "")
+  end
+
   setup_all do
     R.start
     :ok
@@ -16,6 +23,63 @@ defmodule RedisTest do
     assert R.set(:a, 3) == :ok
     assert R.get(:a) == "3"
   end
+
+  test "del works" do
+    R.set(:a, 3)
+    assert R.del(:a) == 1
+    assert R.get(:a) == :undefined
+  end
+
+  test "rpush works" do
+    assert R.rpush(:a, "Hello") == 1
+    assert R.rpush(:a, "world!") == 2
+  end
+
+  test "lrange works" do
+    R.rpush(:a, "Hello")
+    R.rpush(:a, "world!")
+    assert R.lrange(:a, "0", "-1") == ["Hello", "world!"]
+  end
+
+  test "zadd works" do
+    assert R.zadd(:a, 1, "foo") == 1
+    assert R.zadd(:a, 2, "bar") == 1
+    assert R.zadd(:a, 1, "foo") == 0
+  end
+
+  test "zrem works" do
+    R.zadd(:a, 1, "foo")
+    assert R.zrem(:a, "foo") == 1
+    R.zadd(:a, 1, "bar")
+    R.zadd(:a, 1, "bar")
+    assert R.zrem(:a, "bar") == 1
+    assert R.zrem(:a, "mumble") == 0
+  end
+
+  test "incr works" do
+    assert R.incr(:a) == 1
+    assert R.incr(:a) == 2
+    assert R.incr(:a) == 3
+  end
+
+  test "publish works" do
+    assert R.publish(:a, "foo") == 0
+  end
+
+  #test "subscribe works" do
+  #  R.subscribe(:a)
+  #end
+
+  #test "unsubscribe works" do
+  #end
+
+  #test "multi works" do
+  #  result = R.multi fn ->
+  #    R.set(:a, "foo")
+  #    R.get(:a)
+  #  end
+  #  assert result == [:ok, "foo"]
+  #end
 
   test "sadd and smembers works" do
     assert R.sadd("testset", "a") == 1

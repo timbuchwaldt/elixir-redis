@@ -5,9 +5,13 @@ defmodule Redis do
   @type sts_reply :: :ok | binary
   @type int_reply :: integer
 
-  @spec start :: {:ok, pid}
+  #@spec start :: {:ok, pid}
   def start do
     :gen_server.start( {:local,:redis}, Redis.Server, [], [] )
+  end
+
+  def start(options) do
+    :gen_server.start( {:local, :redis}, Redis.Server, options, [])
   end
 
   @spec get(key) :: value
@@ -18,6 +22,38 @@ defmodule Redis do
   @spec set(key, value) :: sts_reply
   def set(key, value) do
     call_server({ :set, key, value }) |> sts_reply
+  end
+
+  def del(key) do
+    call_server({ :del, key }) |> int_reply
+  end
+
+  def rpush(key, value) do
+    call_server({ :rpush, key, value }) |> int_reply
+  end
+
+  def lrange(key, a, b) do
+    call_server({ :lrange, key, a, b }) |> sts_reply
+  end
+
+  def zadd(key, score, value) do
+    call_server({ :zadd, key, score, value }) |> int_reply
+  end
+
+  def zrem(key, value) do
+    call_server({ :zrem, key, value }) |> int_reply
+  end
+
+  def incr(key) do
+    call_server({ :incr, key }) |> int_reply
+  end
+
+  def publish(channel, message) do
+    call_server({ :publish, channel, message }) |> int_reply
+  end
+
+  def subscribe(channel) do
+    call_server({ :subscribe, channel }) |> sts_reply
   end
 
   # Set functions:

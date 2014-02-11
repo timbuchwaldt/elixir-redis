@@ -6,10 +6,15 @@ defmodule Redis.Server do
   @type value :: binary | atom | integer
   @type sts_reply :: :ok | binary
 
-  @spec init([]) :: {:ok, pid}
-
-  def init([]) do
-    :eredis.start_link()
+  def init(options) do
+    case options do
+      [] -> :eredis.start_link
+      _ ->
+        :eredis.start_link(options[:host],
+                           options[:port],
+                           options[:db],
+                           options[:password])
+    end
   end
 
   def handle_call({command}, _from, client) do
@@ -27,6 +32,12 @@ defmodule Redis.Server do
   def handle_call({command, key, value}, _from, client) do
     cmdstring = String.upcase(to_string(command))
     res = client |> query([cmdstring, key, value])
+    { :reply, res, client }
+  end
+
+  def handle_call({command, key, range_start, range_end}, _from, client) do
+    cmdstring = String.upcase(to_string(command))
+    res = client |> query([cmdstring, key, range_start, range_end])
     { :reply, res, client }
   end
 
