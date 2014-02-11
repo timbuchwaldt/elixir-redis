@@ -17,6 +17,11 @@ defmodule Redis.Server do
     end
   end
 
+  def handle_call({:exec}, _from, client) do
+    res = :eredis.q(client, ["EXEC"])
+    { :reply, res, client }
+  end
+
   def handle_call({command}, _from, client) do
     cmdstring = String.upcase(to_string(command))
     res = client |> query([cmdstring])

@@ -52,8 +52,11 @@ defmodule Redis do
     call_server({ :publish, channel, message }) |> int_reply
   end
 
-  def subscribe(channel) do
-    call_server({ :subscribe, channel }) |> sts_reply
+  def multi(func) do
+    call_server({ :multi })
+    func.()
+    {:ok, result} = call_server({ :exec })
+    Enum.map(result, &map_reply/1)
   end
 
   # Set functions:
@@ -130,4 +133,7 @@ defmodule Redis do
 
   defp sts_reply(reply), do:
     reply
+
+  defp map_reply("OK"), do: :ok
+  defp map_reply(reply), do: reply
 end

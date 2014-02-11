@@ -73,13 +73,13 @@ defmodule RedisTest do
   #test "unsubscribe works" do
   #end
 
-  #test "multi works" do
-  #  result = R.multi fn ->
-  #    R.set(:a, "foo")
-  #    R.get(:a)
-  #  end
-  #  assert result == [:ok, "foo"]
-  #end
+  test "multi works" do
+    result = R.multi fn ->
+      R.set(:a, "foo")
+      R.get(:a)
+    end
+    assert result == [:ok, "foo"]
+  end
 
   test "sadd and smembers works" do
     assert R.sadd("testset", "a") == 1
