@@ -3,10 +3,29 @@ defmodule RedisTest do
   alias Redis, as: R
 
   test "start with arguments" do
-    R.start(host: "127.0.0.1",
+    {:ok, pid} = R.connect(host: '127.0.0.1',
             port: 6379,
-            db: "switchboard",
-            password: "")
+            db: 2,
+            password: '')
+    assert R.set(pid, :a, 3) == :ok
+    assert R.get(pid, :a) == "3"
+    assert R.stop(pid) == :ok
+  end
+
+  test "stop" do
+    {:ok, pid} = R.connect()
+    assert R.stop(pid) == :ok
+  end
+
+  test "multiple databases" do
+    {:ok, db1} = R.connect(db: 1)
+    {:ok, db2} = R.connect(db: 2)
+    db1 |> R.set(:key, "val1")
+    db2 |> R.set(:key, "val2")
+    assert db1 |>R.get(:key) == "val1"
+    assert db2 |>R.get(:key) == "val2"
+    R.stop(db1)
+    R.stop(db2)
   end
 
   setup_all do

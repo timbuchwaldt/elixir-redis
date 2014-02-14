@@ -6,14 +6,26 @@ defmodule Redis.Server do
   @type value :: binary | atom | integer
   @type sts_reply :: :ok | binary
 
+
+  def defaults do
+    [host: '127.0.0.1',
+      port: 6379,
+      db: 0,
+      password: '',
+      reconnect_sleep: 100]
+  end
+
   def init(options) do
     case options do
       [] -> :eredis.start_link
       _ ->
+        options = Dict.merge(defaults, options)
+
         :eredis.start_link(options[:host],
                            options[:port],
                            options[:db],
-                           options[:password])
+                           options[:password],
+                           options[:reconnect_sleep])
     end
   end
 
@@ -44,6 +56,15 @@ defmodule Redis.Server do
     cmdstring = String.upcase(to_string(command))
     res = client |> query([cmdstring, key, range_start, range_end])
     { :reply, res, client }
+  end
+
+  def handle_cast({:stop}, client) do
+    {:stop, :normal, client}
+  end
+
+  def terminate(_reason, client) do
+    :eredis.stop(client)
+    :ok
   end
 
   @spec query(pid, list) :: binary
