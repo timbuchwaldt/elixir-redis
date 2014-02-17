@@ -14,3 +14,6 @@ script:
   - mix test
 env:
   - MIX_ENV=test
+services:
+  - redis-server
+
