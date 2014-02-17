@@ -38,7 +38,7 @@ defmodule Redis do
   end
 
   def lrange(pid\\nil,key, a, b) do
-    call_server({ :lrange, key, a, b }) |> sts_reply
+    call_server(pid, { :lrange, key, a, b }) |> sts_reply
   end
 
   def zadd(pid\\nil, key, score, value) do
