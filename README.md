@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/timbuchwaldt/elixir-redis.png?branch=master)](https://travis-ci.org/timbuchwaldt/elixir-redis)
 # Elixir Redis
 
 A easy Elixir client for Redis, based on the awesome [eredis](https://github.com/wooga/eredis).
