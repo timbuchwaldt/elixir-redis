@@ -5,6 +5,7 @@ defmodule Redis do
   @type sts_reply :: :ok | binary
   @type int_reply :: integer
   @type name :: atom | []
+  @type secs :: integer
 
   def start() do
     :gen_server.start( {:local, :redis}, Redis.Server, [], [])
@@ -112,7 +113,12 @@ defmodule Redis do
   def expire(pid\\nil, key, value) do
     call_server(pid, {:expire, key, value}) |> int_reply
   end
-
+  
+  @spec setex(pid, key, secs, value) :: sts_reply
+  def setex(pid \\ nil, key, secs, value) do
+    call_server(pid, {:setex, key, secs, value}) |> sts_reply
+  end
+  
   @spec flushall(pid) :: sts_reply
   def flushall(pid\\nil) do
     call_server(pid, {:flushall}) |> sts_reply
