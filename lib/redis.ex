@@ -119,7 +119,7 @@ defmodule Redis do
   end
 
   @spec call_server(pid, tuple|atom) :: value
-  defp call_server(pid\\nil, args) do
+  defp call_server(pid, args) do
     :gen_server.call(pid || client, args)
   end
 
