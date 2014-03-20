@@ -11,9 +11,13 @@ defmodule Redis do
     :gen_server.start( {:local, :redis}, Redis.Server, [], [])
   end
 
+  def start_link() do
+    :gen_server.start_link( {:local, :redis}, Redis.Server, [], [])
+  end
+
   @spec connect([Keyword.t] | []) :: {:ok, pid} | {:error, Reason::term()}
   def connect(options\\[]) do
-    :gen_server.start(Redis.Server, options, [])
+    :gen_server.start_link(Redis.Server, options, [])
   end
 
   def stop(pid) do
