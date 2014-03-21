@@ -5,14 +5,19 @@ defmodule Redis do
   @type sts_reply :: :ok | binary
   @type int_reply :: integer
   @type name :: atom | []
+  @type secs :: integer
 
   def start() do
     :gen_server.start( {:local, :redis}, Redis.Server, [], [])
   end
 
+  def start_link() do
+    :gen_server.start_link( {:local, :redis}, Redis.Server, [], [])
+  end
+
   @spec connect([Keyword.t] | []) :: {:ok, pid} | {:error, Reason::term()}
   def connect(options\\[]) do
-    :gen_server.start(Redis.Server, options, [])
+    :gen_server.start_link(Redis.Server, options, [])
   end
 
   def stop(pid) do
@@ -112,14 +117,19 @@ defmodule Redis do
   def expire(pid\\nil, key, value) do
     call_server(pid, {:expire, key, value}) |> int_reply
   end
-
+  
+  @spec setex(pid, key, secs, value) :: sts_reply
+  def setex(pid \\ nil, key, secs, value) do
+    call_server(pid, {:setex, key, secs, value}) |> sts_reply
+  end
+  
   @spec flushall(pid) :: sts_reply
   def flushall(pid\\nil) do
     call_server(pid, {:flushall}) |> sts_reply
   end
 
   @spec call_server(pid, tuple|atom) :: value
-  defp call_server(pid\\nil, args) do
+  defp call_server(pid, args) do
     :gen_server.call(pid || client, args)
   end
 

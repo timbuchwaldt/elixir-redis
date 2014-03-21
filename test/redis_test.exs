@@ -176,6 +176,16 @@ defmodule RedisTest do
     assert R.ttl(:expire) >= 1
   end
 
+  test "setex works" do
+    assert R.setex(:a, 3, 3) == :ok
+    assert R.get(:a) == "3"
+  end
+  
+  test "setex expire works" do
+    R.setex(:expire, 3, 3)
+    assert R.ttl(:expire) >= 1
+  end
+
   test "flushall works" do
     assert R.flushall == :ok
   end
