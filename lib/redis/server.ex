@@ -52,6 +52,12 @@ defmodule Redis.Server do
     { :reply, res, client }
   end
 
+  def handle_call({command, key, field,  value}, _from, client) do
+    cmdstring = String.upcase(to_string(command))
+    res = client |> query([cmdstring, key, field, value])
+    { :reply, res, client }
+  end
+
   def handle_call({command, key, range_start, range_end}, _from, client) do
     cmdstring = String.upcase(to_string(command))
     res = client |> query([cmdstring, key, range_start, range_end])
@@ -72,4 +78,3 @@ defmodule Redis.Server do
     client |> :eredis.q(command) |> elem 1
 
 end
-

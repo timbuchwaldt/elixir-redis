@@ -1,5 +1,5 @@
 defmodule RedisTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   alias Redis, as: R
 
   test "start with arguments" do
@@ -180,7 +180,7 @@ defmodule RedisTest do
     assert R.setex(:a, 3, 3) == :ok
     assert R.get(:a) == "3"
   end
-  
+
   test "setex expire works" do
     R.setex(:expire, 3, 3)
     assert R.ttl(:expire) >= 1
@@ -188,5 +188,10 @@ defmodule RedisTest do
 
   test "flushall works" do
     assert R.flushall == :ok
+  end
+
+  test "hset works" do
+    R.hset(:set, :foo, 1)
+    assert R.hget(:set, :foo) == "1"
   end
 end

@@ -34,6 +34,14 @@ defmodule Redis do
     call_server(pid, { :set, key, value }) |> sts_reply
   end
 
+  def hset(pid\\nil, key, field, value) do
+    call_server(pid, { :hset, key, field, value }) |> int_reply
+  end
+
+  def hget(pid\\nil, key, field) do
+    call_server(pid, { :hget, key, field, })
+  end
+
   def del(pid\\nil, key) do
     call_server(pid, { :del, key }) |> int_reply
   end
@@ -117,12 +125,12 @@ defmodule Redis do
   def expire(pid\\nil, key, value) do
     call_server(pid, {:expire, key, value}) |> int_reply
   end
-  
+
   @spec setex(pid, key, secs, value) :: sts_reply
   def setex(pid \\ nil, key, secs, value) do
     call_server(pid, {:setex, key, secs, value}) |> sts_reply
   end
-  
+
   @spec flushall(pid) :: sts_reply
   def flushall(pid\\nil) do
     call_server(pid, {:flushall}) |> sts_reply
