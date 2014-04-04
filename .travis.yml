@@ -3,7 +3,7 @@ notifications:
   recipients:
     - tim@buchwaldt.ws
 otp_release:
-  - R16B02
+  - 17.0-rc1
 before_install:
   - git clone https://github.com/elixir-lang/elixir
   - cd elixir && make && cd ..
@@ -16,4 +16,3 @@ env:
   - MIX_ENV=test
 services:
   - redis-server
-
