@@ -39,7 +39,11 @@ defmodule Redis do
   end
 
   def hget(pid\\nil, key, field) do
-    call_server(pid, { :hget, key, field, })
+    call_server(pid, { :hget, key, field })
+  end
+
+  def hgetall(pid\\nil, key) do
+    call_server(pid, { :hgetall, key }) |> hash_reply
   end
 
   def del(pid\\nil, key) do
@@ -156,6 +160,11 @@ defmodule Redis do
 
   defp sts_reply(reply), do:
     reply
+
+  defp hash_reply(reply) do
+    coll = Enum.chunk(reply, 2) |> Enum.map(fn [a, b] -> {a, b} end)
+    Enum.into(coll, HashDict.new)
+  end
 
   defp map_reply("OK"), do: :ok
   defp map_reply(reply), do: reply

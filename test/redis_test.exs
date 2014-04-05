@@ -194,4 +194,10 @@ defmodule RedisTest do
     R.hset(:set, :foo, 1)
     assert R.hget(:set, :foo) == "1"
   end
+
+  test "hgetall works" do
+    R.hset(:setall, :foo, 1)
+    R.hset(:setall, :foo2, 2)
+    assert R.hgetall(:setall) == Enum.into([{"foo", "1"}, {"foo2", "2"}], HashDict.new)
+  end
 end
