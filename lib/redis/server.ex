@@ -1,5 +1,5 @@
 defmodule Redis.Server do
-  use GenServer.Behaviour
+  use GenServer
 
   @type client :: pid
   @type key :: binary | atom
