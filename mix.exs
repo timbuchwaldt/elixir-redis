@@ -4,7 +4,7 @@ defmodule Redis.Mixfile do
   def project do
     [ app: :redis,
       version: "1.1.0",
-      elixir: "~> 0.12.4 or ~> 0.13.0-dev",
+      elixir: "~> 0.14.0 or ~> 0.15.0",
       deps: deps ]
   end
 
@@ -17,7 +17,7 @@ defmodule Redis.Mixfile do
   # { :foobar, "~> 0.1", git: "https://github.com/elixir-lang/foobar.git" }
   defp deps do
     [
-      { :eredis, "1.0.6", [ github: "wooga/eredis", tag: "v1.0.6" ] }
+      { :eredis, "1.0.6", github: "wooga/eredis", tag: "v1.0.6" }
     ]
   end
 end

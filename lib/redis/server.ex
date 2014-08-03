@@ -1,5 +1,5 @@
 defmodule Redis.Server do
-  use GenServer.Behaviour
+  use GenServer
 
   @type client :: pid
   @type key :: binary | atom
@@ -55,12 +55,6 @@ defmodule Redis.Server do
   def handle_call({command, key, field,  value}, _from, client) do
     cmdstring = String.upcase(to_string(command))
     res = client |> query([cmdstring, key, field, value])
-    { :reply, res, client }
-  end
-
-  def handle_call({command, key, range_start, range_end}, _from, client) do
-    cmdstring = String.upcase(to_string(command))
-    res = client |> query([cmdstring, key, range_start, range_end])
     { :reply, res, client }
   end
 
