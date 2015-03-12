@@ -1,3 +1,6 @@
+# Discontinued
+As there are way better implementations this repo ist discontinued. Use [artemeffs awesome implementation](https://github.com/artemeff/exredis)!
+
 [![Build Status](https://travis-ci.org/timbuchwaldt/elixir-redis.png?branch=master)](https://travis-ci.org/timbuchwaldt/elixir-redis)
 # Elixir Redis
 
