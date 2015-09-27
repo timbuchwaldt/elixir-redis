@@ -1,11 +1,15 @@
 language: elixir
 elixir:
   - 1.0.0
+  - 1.0.5
+  - 1.1.0
 notifications:
   recipients:
     - tim@buchwaldt.ws
 otp_release:
   - 17.1
+  - 18.0
+  - 18.1
 env:
   - MIX_ENV=test
 services:
