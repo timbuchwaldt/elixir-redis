@@ -17,7 +17,7 @@ defmodule Redis.Mixfile do
   # { :foobar, "~> 0.1", git: "https://github.com/elixir-lang/foobar.git" }
   defp deps do
     [
-      { :eredis, "1.0.6", github: "wooga/eredis", tag: "v1.0.6" }
+      { :eredis, "1.0.8", github: "wooga/eredis", tag: "v1.0.8" }
     ]
   end
 end
